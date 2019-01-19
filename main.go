@@ -1,16 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"time"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func greet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World! %s", time.Now())
+func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Body:       "Hello AWS Lambda and Netlify",
+	}, nil
 }
 
 func main() {
-	http.HandleFunc("/api/v1/greet", greet)
-	http.ListenAndServe(":80", nil)
+	// Make the handler available for Remote Procedure Call by AWS Lambda
+	lambda.Start(handler)
 }
